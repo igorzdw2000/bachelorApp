@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    internal class Task
+    public class Task
     {
+        public int TaskId { get; set; }
+        public string TaskName { get; set; }
+        public string TaskDescription { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int ProjectId { get; set; }
+        public Project Project { get; set; }
     }
 }

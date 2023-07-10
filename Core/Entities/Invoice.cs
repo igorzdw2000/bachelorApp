@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    internal class Invoice
+    public class Invoice
     {
         public int InvoiceId { get; set; }
         public DateTime Date { get; set; }
