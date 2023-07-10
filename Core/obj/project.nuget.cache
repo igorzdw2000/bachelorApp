@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "hFC52+eUAB1HHO3Zvpm/6gLf9tPnX+DpV5avOsQRRzQzr3kif6poJkO2I88U07i+f0tZ7UozNNGS/yI5YmIiVA==",
+  "dgSpecHash": "0b6GwSSi/R4om3DBQuwpf0PfAvtpUYKVr47A3OOKTuH0Y5DJA97ina0jWP1qVn59shUzrLkoNrnj/1UWW/rr3A==",
   "success": true,
   "projectFilePath": "C:\\Users\\igoro\\source\\repos\\licencjatApp\\Core\\Core.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\igoro\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.5\\microsoft.aspnetcore.openapi.7.0.5.nupkg.sha512",
+    "C:\\Users\\igoro\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\igoro\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\igoro\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
+    "C:\\Users\\igoro\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
+    "C:\\Users\\igoro\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
+    "C:\\Users\\igoro\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+  ],
   "logs": []
 }
