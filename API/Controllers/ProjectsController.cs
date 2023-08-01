@@ -6,11 +6,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController : Controller
+    public class ProjectsController : Controller
     {
         private readonly IProjectRepository _projectRepository;
 
-        public ProjectController(IProjectRepository projectRepository)
+        public ProjectsController(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
         }
@@ -62,16 +62,7 @@ namespace API.Controllers
             return NotFound("Project with this id was not found");
             
         }
-        [HttpPut("{projectId}/assign-customer/{customerId}")]
-        public IActionResult AssignCustomerToProject(int projectId, int customerId)
-        {
-            var existingProject = _projectRepository.GetProject(projectId);
-            if (existingProject != null)
-            {
-                _projectRepository.AssignCustomerToProject(projectId, customerId);
-                return Ok("Customer successfuly assigned to project");
-            }
-            return NotFound("Cannot find Project with this id");
-        }
+       
+
     }
 }

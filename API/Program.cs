@@ -14,6 +14,7 @@ builder.Services.AddTransient<SeedData>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
+builder.Services.AddScoped<ICustomerRepository,CustomerRepository>();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
