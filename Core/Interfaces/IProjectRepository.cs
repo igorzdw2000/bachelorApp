@@ -4,19 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace Core.Interfaces
 {
     public interface IProjectRepository
     {
-        List<Project> GetProjects();
-        Project GetProject(int id);
-        List<Project> GetProjectsByCustomerName(string name);
-        bool AddProject(Project project);
-        bool RemoveProject(int id);
-        void UpdateProjectValue(int id,double value);
-        bool UpdateProjectEndDate(int id, DateTime newEndDate);
-        void AssignCustomerToProject(int projectId, int customerId);
+        Task<IEnumerable<Project>> GetProjectsAsync();
+        Task<Project> GetProjectByIdAsync(int id);
+        Task<IEnumerable<Project>> GetProjectsByCustomerName(string name);
+        Task AddProject(Project project);
+        Task RemoveProject(int id);
+        Task UpdateProjectValue(int id,double value);
+        Task UpdateProjectEndDate(int id, DateTime newEndDate);
+        Task AssignCustomerToProject(int projectId, int customerId);
         bool CheckIfProjectExists(int id);
         
     }

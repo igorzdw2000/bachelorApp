@@ -38,12 +38,9 @@ namespace Infrastracture.Repositories
 
         public async Task UpdateCustomer(int id,Customer customer)
         {
-            var customerForUpdate = await _context.Customers.FindAsync(customer);
-            if (customerForUpdate != null)
-            {
-               _context.Customers.Update(customer);
-            }
-            _context.SaveChanges();
+           
+           _context.Customers.Update(customer);
+            await _context.SaveChangesAsync();
         }
         
 

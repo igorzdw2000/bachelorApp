@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace Infrastracture.Repositories
 {
@@ -19,26 +20,24 @@ namespace Infrastracture.Repositories
             _context = context;
         }
 
-        public bool AddProject(Project project)
+        public async Task AddProject(Project project)
         {
             if(project !=  null)
             {
-                if(!CheckIfProjectExists(project.ProjectId))
-                {
-                    _context.Projects.Add(project);
-                }
+                 _context.Projects.Add(project);
+               
             }
-            return _context.SaveChanges() > 1 ? true : false;
+            _context.SaveChanges();
         }
 
-        public void AssignCustomerToProject(int projectId, int customerId)
+        public async Task AssignCustomerToProject(int projectId, int customerId)
         {
             if(!CheckIfProjectExists(projectId))
             {
-                var customerToAssign = _context.Customers.FirstOrDefault(p=>p.CustomerId==customerId);
+                var customerToAssign = await _context.Customers.FirstOrDefaultAsync(p=>p.CustomerId==customerId);
                 if(customerToAssign != null)
                 {
-                    var project = _context.Projects.FirstOrDefault(p=>p.ProjectId==projectId);
+                    var project = await _context.Projects.FirstOrDefaultAsync(p=>p.ProjectId==projectId);
                     project.Customer = customerToAssign;
                     project.CustomerId = customerToAssign.CustomerId;
                     _context.SaveChanges();
@@ -51,56 +50,56 @@ namespace Infrastracture.Repositories
             return _context.Projects.Any(p=>p.ProjectId == id);
         }
 
-        public Project GetProject(int id)
+        public async Task<Project> GetProjectByIdAsync(int id)
         {
-            return _context.Projects
+            return await _context.Projects
                 .Include(p => p.Customer)
-                .FirstOrDefault(p=>p.ProjectId==id);
+                .FirstOrDefaultAsync(p=>p.ProjectId==id);
         }
 
-        public List<Project> GetProjects()
+        public async Task<IEnumerable<Project>> GetProjectsAsync()
         {
-            return _context.Projects
+            return await _context.Projects
                 .Include(p=>p.Customer)
-                .OrderBy(o=>o.CustomerId).ToList();
+                .OrderBy(o=>o.CustomerId).ToListAsync();
         }
 
-        public List<Project> GetProjectsByCustomerName(string name)
+        public async Task<IEnumerable<Project>> GetProjectsByCustomerName(string name)
         {
-            return _context.Projects.Where(p=>p.Customer.Name == name).ToList();
+            return await _context.Projects.Where(p=>p.Customer.Name == name).ToListAsync();
         }
 
-        public bool RemoveProject(int id)
+        public async Task RemoveProject(int id)
         {
-            var projectToDelete = _context.Projects.FirstOrDefault(p => p.ProjectId == id);
+            var projectToDelete = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
             if(projectToDelete != null)
             {
                 _context.Projects.Remove(projectToDelete);
             }
-            return _context.SaveChanges() > 1 ? true : false;
+            _context.SaveChanges();
         }
 
 
-        public bool UpdateProjectEndDate(int id, DateTime newEndDate)
+        public async Task UpdateProjectEndDate(int id, DateTime newEndDate)
         {
             if (CheckIfProjectExists(id))
             {
-                var projectForUpdate = _context.Projects.Where(p => p.ProjectId == id).FirstOrDefault();
-                if (projectForUpdate != null)
+                var projectForUpdate = _context.Projects.Where(p => p.ProjectId == id).FirstOrDefaultAsync();
+                if (projectForUpdate.Result != null)
                 {
-                    projectForUpdate.EndDate = newEndDate;
+                    projectForUpdate.Result.EndDate = newEndDate;
                 }
             }
-            return _context.SaveChanges() > 1 ? true : false;
+            _context.SaveChanges();
         }
 
 
-        public void UpdateProjectValue(int id, double value)
+        public async Task UpdateProjectValue(int id, double value)
         {
-            var projectForUpdate = _context.Projects.FirstOrDefault(p=>p.ProjectId==id);
-            if (projectForUpdate != null)
+            var projectForUpdate = _context.Projects.FirstOrDefaultAsync(p=>p.ProjectId==id);
+            if (projectForUpdate.Result != null)
             {
-                projectForUpdate.ProjectValue = value;
+                projectForUpdate.Result.ProjectValue = value;
             }
             _context.SaveChanges();
         }

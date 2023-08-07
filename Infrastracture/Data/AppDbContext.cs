@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Task = Core.Entities.Task;
 
 namespace Infrastracture.Data
 {
@@ -21,6 +22,7 @@ namespace Infrastracture.Data
         public DbSet<MaterialSupplier> MaterialSuppliers { get; set; }
         public DbSet<ProjectWeekReport> ProjectWeekReports { get; set; }
         public DbSet<Subcontractor> Subcontractors { get; set; }
+        public DbSet<Task> Tasks { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

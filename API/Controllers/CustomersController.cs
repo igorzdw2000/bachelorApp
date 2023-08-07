@@ -72,11 +72,11 @@ namespace API.Controllers
         {
             try
             {
-                var existingCustomer = await _customerRepository.GetCustomerByIdAsync(id);
-                if (existingCustomer == null)
-                {
-                    return BadRequest("Niepoprawny identyfikator klienta.");
-                }
+                //var existingCustomer = await _customerRepository.GetCustomerByIdAsync(id);
+                //if (existingCustomer == null)
+                //{
+                //    return BadRequest("Niepoprawny identyfikator klienta.");
+                //}
 
                 if (!ModelState.IsValid)
                 {
