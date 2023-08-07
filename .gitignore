@@ -1,8 +1,0 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-obj
-bin
-appsettings.json
-*.db-wal
-*.db-shm

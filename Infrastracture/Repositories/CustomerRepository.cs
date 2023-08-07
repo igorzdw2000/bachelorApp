@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace Infrastracture.Repositories
 {
@@ -19,47 +20,68 @@ namespace Infrastracture.Repositories
             _context = context;
         }
 
-        public IEnumerable<Customer> GetCustomers()
+        public async Task<IEnumerable<Customer>> GetCustomersAsync()
         {
-            return _context.Customers.ToList();
+            return await _context.Customers.ToListAsync();
         }
 
-        public Customer GetCustomerById(int id)
+        public async Task<Customer> GetCustomerByIdAsync(int id)
         {
-            return _context.Customers.FirstOrDefault(c => c.CustomerId == id);
+            return await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
         }
 
-        public void AddCustomer(Customer customer)
+        public async Task AddCustomer(Customer customer)
         {
             _context.Customers.Add(customer);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void UpdateCustomer(int id,Customer customer)
+        public async Task UpdateCustomer(int id,Customer customer)
         {
-            //var customerForUpdate = _context.Customers.Find(customer);
-            //if (customerForUpdate != null)
-            //{
-                _context.Customers.Update(customer);
-            //}
+            var customerForUpdate = await _context.Customers.FindAsync(customer);
+            if (customerForUpdate != null)
+            {
+               _context.Customers.Update(customer);
+            }
             _context.SaveChanges();
         }
+        
 
-        public void DeleteCustomer(int id)
+        public async Task DeleteCustomer(int id)
         {
-            var customerToDelete = _context.Customers.Find(id);
+            var customerToDelete = await _context.Customers.FindAsync(id);
             if (customerToDelete != null)
             {
                 _context.Customers.Remove(customerToDelete);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public IEnumerable<Project> GetProjectsForCustomer(int customerId)
+        public async Task<IEnumerable<Project>> GetProjectsForCustomer(int customerId)
         {
-            return _context.Projects
+            return await _context.Projects
                 .Include(p=>p.Customer)
-                .Where(p => p.CustomerId == customerId).ToList();
+                .Where(p => p.CustomerId == customerId).ToListAsync();
+        }
+
+        public async Task AssignProjectToCustomer(int customerId, int projectId)
+        {
+            var project = _context.Projects.FindAsync(projectId);
+            if(project.Result != null)
+            {
+                project.Result.CustomerId = customerId;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UnassignProjectToCustomer(int customerId, int projectId)
+        {
+            var project = _context.Projects.FindAsync(projectId);
+            if(project.Result != null && project.Result.CustomerId == customerId)
+            {
+                project.Result.CustomerId = null;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

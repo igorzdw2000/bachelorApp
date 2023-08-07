@@ -17,7 +17,7 @@ namespace Core.Entities
         public DateTime EndDate { get; set; }
         public double ProjectValue { get; set; }
         public Customer Customer { get; set; }
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         
     }
 }
