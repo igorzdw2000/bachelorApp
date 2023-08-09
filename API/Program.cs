@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
 builder.Services.AddScoped<ICustomerRepository,CustomerRepository>();
 builder.Services.AddScoped<ITaskRepository,TaskRepository>();
+builder.Services.AddScoped<ISubcontractorRepository, SubcontractorRepository>();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));

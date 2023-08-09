@@ -15,5 +15,7 @@ namespace Core.Entities
         public DateTime EndDate { get; set; }
         public int ProjectId { get; set; }
         public Project Project { get; set; }
+        public int SubcontractorId { get; set; }
+        public Subcontractor Subcontractor { get; set; }
     }
 }
