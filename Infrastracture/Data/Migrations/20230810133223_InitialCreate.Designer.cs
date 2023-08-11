@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastracture.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230801155541_InitialCreate")]
+    [Migration("20230810133223_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -113,6 +113,9 @@ namespace Infrastracture.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("MaterialSupplierId");
 
                     b.ToTable("MaterialSuppliers");
@@ -128,7 +131,8 @@ namespace Infrastracture.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -161,6 +165,24 @@ namespace Infrastracture.Data.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("Core.Entities.ProjectMaterial", b =>
+                {
+                    b.Property<int>("PId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PId", "MId");
+
+                    b.HasIndex("MId");
+
+                    b.ToTable("ProjectMaterials");
+                });
+
             modelBuilder.Entity("Core.Entities.ProjectWeekReport", b =>
                 {
                     b.Property<int>("ProjectWeekReportId")
@@ -189,17 +211,65 @@ namespace Infrastracture.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContactName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("NIP")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("SubcontractorId");
 
                     b.ToTable("Subcontractors");
+                });
+
+            modelBuilder.Entity("Core.Entities.Task", b =>
+                {
+                    b.Property<int>("TaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SubcontractorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TaskDescription")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TaskName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("TaskId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("SubcontractorId");
+
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("Core.Entities.Invoice", b =>
@@ -248,6 +318,25 @@ namespace Infrastracture.Data.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("Core.Entities.ProjectMaterial", b =>
+                {
+                    b.HasOne("Core.Entities.MaterialSupplier", "MaterialSupplier")
+                        .WithMany("ProjectMaterials")
+                        .HasForeignKey("MId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Project", "Project")
+                        .WithMany("ProjectMaterials")
+                        .HasForeignKey("PId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MaterialSupplier");
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("Core.Entities.ProjectWeekReport", b =>
                 {
                     b.HasOne("Core.Entities.Project", "Project")
@@ -257,6 +346,35 @@ namespace Infrastracture.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Core.Entities.Task", b =>
+                {
+                    b.HasOne("Core.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Subcontractor", "Subcontractor")
+                        .WithMany()
+                        .HasForeignKey("SubcontractorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("Subcontractor");
+                });
+
+            modelBuilder.Entity("Core.Entities.MaterialSupplier", b =>
+                {
+                    b.Navigation("ProjectMaterials");
+                });
+
+            modelBuilder.Entity("Core.Entities.Project", b =>
+                {
+                    b.Navigation("ProjectMaterials");
                 });
 #pragma warning restore 612, 618
         }

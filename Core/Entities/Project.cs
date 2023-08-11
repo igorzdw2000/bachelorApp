@@ -18,6 +18,7 @@ namespace Core.Entities
         public double ProjectValue { get; set; }
         public Customer Customer { get; set; }
         public int? CustomerId { get; set; }
-        
+        public ICollection<ProjectMaterial> ProjectMaterials { get; set; }
+
     }
 }

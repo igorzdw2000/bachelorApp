@@ -121,8 +121,17 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSubcontractor(int id)
         {
-            _subcontractorRepository.DeleteSubcontractor(id);
-            return Ok();
+            try
+            {
+                await _subcontractorRepository.DeleteSubcontractor(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside the DeleteSubcontractor action: {ex}");
+                return StatusCode(500, "Internal server error");
+            }
+            
         }
     }
 }

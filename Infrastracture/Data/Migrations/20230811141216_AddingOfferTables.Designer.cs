@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastracture.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230809203842_SubcontractorsTableCorrection")]
-    partial class SubcontractorsTableCorrection
+    [Migration("20230811141216_AddingOfferTables")]
+    partial class AddingOfferTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,9 +113,81 @@ namespace Infrastracture.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("MaterialSupplierId");
 
                     b.ToTable("MaterialSuppliers");
+                });
+
+            modelBuilder.Entity("Core.Entities.Offer", b =>
+                {
+                    b.Property<int>("OfferId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("OfferDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("TotalEstimatedLaborCost")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("TotalEstimatedMaterialCost")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("OfferId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Offers");
+                });
+
+            modelBuilder.Entity("Core.Entities.OfferDetail", b =>
+                {
+                    b.Property<int>("OfferId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OfferDetailId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("EstimatedLaborCost")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("EstimatedMaterialCost")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("EstimatedTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("OfferId", "OfferDetailId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("OfferDetails");
                 });
 
             modelBuilder.Entity("Core.Entities.Project", b =>
@@ -162,6 +234,24 @@ namespace Infrastracture.Data.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("Core.Entities.ProjectMaterial", b =>
+                {
+                    b.Property<int>("PId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PId", "MId");
+
+                    b.HasIndex("MId");
+
+                    b.ToTable("ProjectMaterials");
+                });
+
             modelBuilder.Entity("Core.Entities.ProjectWeekReport", b =>
                 {
                     b.Property<int>("ProjectWeekReportId")
@@ -182,6 +272,25 @@ namespace Infrastracture.Data.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectWeekReports");
+                });
+
+            modelBuilder.Entity("Core.Entities.Service", b =>
+                {
+                    b.Property<int>("ServiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ServiceDescription")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ServiceId");
+
+                    b.ToTable("Service");
                 });
 
             modelBuilder.Entity("Core.Entities.Subcontractor", b =>
@@ -286,6 +395,36 @@ namespace Infrastracture.Data.Migrations
                     b.Navigation("Subcontractor");
                 });
 
+            modelBuilder.Entity("Core.Entities.Offer", b =>
+                {
+                    b.HasOne("Core.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Core.Entities.OfferDetail", b =>
+                {
+                    b.HasOne("Core.Entities.Offer", "Offer")
+                        .WithMany()
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Offer");
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("Core.Entities.Project", b =>
                 {
                     b.HasOne("Core.Entities.Customer", "Customer")
@@ -295,6 +434,25 @@ namespace Infrastracture.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Core.Entities.ProjectMaterial", b =>
+                {
+                    b.HasOne("Core.Entities.MaterialSupplier", "MaterialSupplier")
+                        .WithMany("ProjectMaterials")
+                        .HasForeignKey("MId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Project", "Project")
+                        .WithMany("ProjectMaterials")
+                        .HasForeignKey("PId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MaterialSupplier");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Core.Entities.ProjectWeekReport", b =>
@@ -325,6 +483,16 @@ namespace Infrastracture.Data.Migrations
                     b.Navigation("Project");
 
                     b.Navigation("Subcontractor");
+                });
+
+            modelBuilder.Entity("Core.Entities.MaterialSupplier", b =>
+                {
+                    b.Navigation("ProjectMaterials");
+                });
+
+            modelBuilder.Entity("Core.Entities.Project", b =>
+                {
+                    b.Navigation("ProjectMaterials");
                 });
 #pragma warning restore 612, 618
         }

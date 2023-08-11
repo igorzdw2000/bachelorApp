@@ -2,6 +2,8 @@
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace API.Controllers
 {
@@ -25,11 +27,50 @@ namespace API.Controllers
             return Ok(projects);
         }
         [HttpGet("{projectId}")]
-        [ProducesResponseType(200,Type = typeof(Project))]
+        [ProducesResponseType(200, Type = typeof(Project))]
         public async Task<IActionResult> GetProject(int projectId)
         {
             var project = await _projectRepository.GetProjectByIdAsync(projectId);
             return Ok(project);
+        }
+        [HttpGet("{projectId}/materials")]
+        public async Task<IActionResult> GetMaterialUsedInProject(int projectId)
+        {
+            try
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
+                var materials = await _projectRepository.GetMaterialsUsedInProject(projectId);
+                if (materials == null)
+                {
+                    return NotFound("Project with this id was not found");
+                }
+                return Ok(JsonSerializer.Serialize(materials, options));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+
+        }
+        [HttpGet("{projectId}/material-cost")]
+        public async Task<IActionResult> GetMaterialCostInProject(int projectId)
+        {
+            try
+            {
+                var material = _projectRepository.CalculateProjectMaterialCosts(projectId);
+                if (material == null)
+                {
+                    return NotFound("Project with this id was not found");
+                }
+                return Ok(material.CalculatedCost);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProjectValue(int id,[FromBody]double projectValue)

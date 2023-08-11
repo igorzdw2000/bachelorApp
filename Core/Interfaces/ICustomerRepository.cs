@@ -13,10 +13,10 @@ namespace Core.Interfaces
         Task<IEnumerable<Customer>> GetCustomersAsync();
         Task<Customer> GetCustomerByIdAsync(int id);
         Task AddCustomer(Customer customer);
-        Task UpdateCustomer(int id,Customer customer);
+        Task UpdateCustomer(int id, Customer customer);
         Task DeleteCustomer(int id);
         Task<IEnumerable<Project>> GetProjectsForCustomer(int customerId);
-        Task AssignProjectToCustomer(int customerId,int projectId);
+        Task AssignProjectToCustomer(int customerId, int projectId);
         Task UnassignProjectToCustomer(int customerId, int projectId);
     }
 }

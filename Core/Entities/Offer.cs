@@ -16,5 +16,7 @@ namespace Core.Entities
         public string Description { get; set; }
         public double TotalEstimatedLaborCost { get; set; }
         public double TotalEstimatedMaterialCost { get; set; }
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
     }
 }

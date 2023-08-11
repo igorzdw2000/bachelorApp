@@ -37,7 +37,8 @@ namespace Infrastracture.Data.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Address = table.Column<string>(type: "TEXT", nullable: false),
-                    Phone = table.Column<string>(type: "TEXT", nullable: false)
+                    Phone = table.Column<string>(type: "TEXT", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,8 +51,11 @@ namespace Infrastracture.Data.Migrations
                 {
                     SubcontractorId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    NIP = table.Column<string>(type: "TEXT", nullable: false)
+                    CompanyName = table.Column<string>(type: "TEXT", nullable: false),
+                    ContactName = table.Column<string>(type: "TEXT", nullable: false),
+                    NIP = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,6 +132,31 @@ namespace Infrastracture.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProjectMaterials",
+                columns: table => new
+                {
+                    PId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<decimal>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectMaterials", x => new { x.PId, x.MId });
+                    table.ForeignKey(
+                        name: "FK_ProjectMaterials_MaterialSuppliers_MId",
+                        column: x => x.MId,
+                        principalTable: "MaterialSuppliers",
+                        principalColumn: "MaterialSupplierId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProjectMaterials_Projects_PId",
+                        column: x => x.PId,
+                        principalTable: "Projects",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProjectWeekReports",
                 columns: table => new
                 {
@@ -145,6 +174,36 @@ namespace Infrastracture.Data.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tasks",
+                columns: table => new
+                {
+                    TaskId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TaskName = table.Column<string>(type: "TEXT", nullable: false),
+                    TaskDescription = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ProjectId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SubcontractorId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tasks", x => x.TaskId);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Subcontractors_SubcontractorId",
+                        column: x => x.SubcontractorId,
+                        principalTable: "Subcontractors",
+                        principalColumn: "SubcontractorId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -169,6 +228,11 @@ namespace Infrastracture.Data.Migrations
                 column: "SubcontractorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProjectMaterials_MId",
+                table: "ProjectMaterials",
+                column: "MId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Projects_CustomerId",
                 table: "Projects",
                 column: "CustomerId");
@@ -177,6 +241,16 @@ namespace Infrastracture.Data.Migrations
                 name: "IX_ProjectWeekReports_ProjectId",
                 table: "ProjectWeekReports",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_ProjectId",
+                table: "Tasks",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_SubcontractorId",
+                table: "Tasks",
+                column: "SubcontractorId");
         }
 
         /// <inheritdoc />
@@ -186,16 +260,22 @@ namespace Infrastracture.Data.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
+                name: "ProjectMaterials");
+
+            migrationBuilder.DropTable(
                 name: "ProjectWeekReports");
+
+            migrationBuilder.DropTable(
+                name: "Tasks");
 
             migrationBuilder.DropTable(
                 name: "MaterialSuppliers");
 
             migrationBuilder.DropTable(
-                name: "Subcontractors");
+                name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "Projects");
+                name: "Subcontractors");
 
             migrationBuilder.DropTable(
                 name: "Customers");

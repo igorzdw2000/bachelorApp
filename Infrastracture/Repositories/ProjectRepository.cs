@@ -45,9 +45,37 @@ namespace Infrastracture.Repositories
             }
         }
 
+        public CalculatedMaterialCost CalculateProjectMaterialCosts(int projectId)
+        {
+            var project = _context.ProjectMaterials
+                .Where(pm=>pm.PId ==projectId)
+                .Select(pm => new
+                {
+                    MaterialCost = pm.Quantity * pm.MaterialSupplier.UnitPrice
+                })
+                .ToList();
+
+            if (project == null)
+            {
+                throw new ArgumentException("Project was not found");
+            }
+            var totalCost = project.Sum(pm => pm.MaterialCost);
+
+            return new CalculatedMaterialCost { CalculatedCost = (decimal)totalCost };
+        }
+
         public bool CheckIfProjectExists(int id)
         {
             return _context.Projects.Any(p=>p.ProjectId == id);
+        }
+
+        public async Task<IEnumerable<ProjectMaterial>> GetMaterialsUsedInProject(int projectId)
+        {
+            var project = await _context.ProjectMaterials
+                .Include(p => p.MaterialSupplier)
+                .Where(pm => pm.PId == projectId)
+                .ToListAsync();
+            return project;
         }
 
         public async Task<Project> GetProjectByIdAsync(int id)

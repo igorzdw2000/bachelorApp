@@ -19,6 +19,9 @@ namespace Core.Interfaces
         Task UpdateProjectEndDate(int id, DateTime newEndDate);
         Task AssignCustomerToProject(int projectId, int customerId);
         bool CheckIfProjectExists(int id);
+        CalculatedMaterialCost CalculateProjectMaterialCosts(int projectId);
+        Task<IEnumerable<ProjectMaterial>> GetMaterialsUsedInProject(int projectId);
+        
         
     }
 }
