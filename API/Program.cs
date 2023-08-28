@@ -20,7 +20,7 @@ builder.Services.AddScoped<ISubcontractorRepository, SubcontractorRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 var app = builder.Build();
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
