@@ -12,12 +12,16 @@ namespace Core.Interfaces
     {
         Task<IEnumerable<Invoice>> GetInvoices();
         Task<Invoice> GetInvoiceById(int id);
+        Task<IEnumerable<InvoiceDetail>> GetInvoiceDetails(int invoiceId);
+        Task<Invoice> GetInvoiceByName(string name);
+        Task<IEnumerable<Invoice>> GetInvoicesByDate(DateTime date);
         Task AddInvoice(Invoice invoice);
         Task UpdateInvoice(Invoice invoice);
         
-        Task<IEnumerable<Invoice>> GetInvoiceForCustomer(int customerId);
-        Task<IEnumerable<Invoice>> GetInvoicesForMaterialSupplier(int materialSupplierId);
+        
         Task<IEnumerable<Invoice>> GetInvoicesForProject(int projectId);
+        Task<IEnumerable<Invoice>> GetInvoicesForMaterialsForProject(int projectId);
+        bool isEditable(int id);
 
         
     }

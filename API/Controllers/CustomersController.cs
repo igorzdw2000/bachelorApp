@@ -1,4 +1,6 @@
-﻿using Core.Entities;
+﻿using API.Dtos;
+using AutoMapper;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +12,12 @@ namespace API.Controllers
     {
 
         private readonly ICustomerRepository _customerRepository;
+        private readonly IMapper _mapper;
 
-        public CustomersController(ICustomerRepository customerRepository)
+        public CustomersController(ICustomerRepository customerRepository, IMapper mapper)
         {
             _customerRepository = customerRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -117,6 +121,21 @@ namespace API.Controllers
             var projects = await _customerRepository.GetProjectsForCustomer(id);
             return Ok(projects);
         }
+        [HttpGet("{id}/invoices")]
+        public async Task<IActionResult> GetCustomerInvoices(int id)
+        {
+            try
+            {
+                var invoices = await _customerRepository.GetInvoiceForCustomer(id);
+                var mapped = _mapper.Map<IEnumerable<Invoice>, IEnumerable<InvoiceToReturnDto>>(invoices);
+                return Ok(mapped);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Wystąpił błąd podczas pobierania faktury: {ex.Message}");
+            }
+            
+        }
         [HttpPost("{customerId}/projects/{projectId}/assign")]
         public async Task<IActionResult> AssignProjectToCustomer(int customerId, int projectId)
         {
@@ -143,6 +162,8 @@ namespace API.Controllers
                 return StatusCode(500, $"An error occured during unassign project to customer: {ex.Message}");
             }
         }
+        
+
 
 
     }

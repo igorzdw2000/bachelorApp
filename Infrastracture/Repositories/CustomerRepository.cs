@@ -38,7 +38,6 @@ namespace Infrastracture.Repositories
 
         public async Task UpdateCustomer(int id,Customer customer)
         {
-           
            _context.Customers.Update(customer);
             await _context.SaveChangesAsync();
         }
@@ -79,6 +78,14 @@ namespace Infrastracture.Repositories
                 project.Result.CustomerId = null;
                 await _context.SaveChangesAsync();
             }
+        }
+        public async Task<IEnumerable<Invoice>> GetInvoiceForCustomer(int customerId)
+        {
+            return await _context.Invoices
+                .Include(p=>p.Customer)
+                .Include(p=>p.Project)
+                .Where(c => c.CustomerId == customerId)
+                .ToListAsync();
         }
     }
 }

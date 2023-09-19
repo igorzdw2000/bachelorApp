@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastracture.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230828093207_Init")]
-    partial class Init
+    [Migration("20230907173157_ChangeInvoiceTable")]
+    partial class ChangeInvoiceTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,38 +66,75 @@ namespace Infrastracture.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceId"));
 
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("DateOfPayment")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InvoiceType")
                         .HasColumnType("int");
 
-                    b.Property<int>("MaterialSupplierId")
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubcontractorId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("SaleDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<double>("TotalValue")
+                    b.Property<double>("TotalToBePaid")
                         .HasColumnType("float");
 
                     b.HasKey("InvoiceId");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("MaterialSupplierId");
-
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("SubcontractorId");
-
                     b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("Core.Entities.InvoiceDetail", b =>
+                {
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InvoiceDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UnitOfMeasurement")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("float");
+
+                    b.HasKey("InvoiceId", "InvoiceDetailId");
+
+                    b.ToTable("InvoiceDetails");
                 });
 
             modelBuilder.Entity("Core.Entities.MaterialSupplier", b =>
@@ -129,7 +166,7 @@ namespace Infrastracture.Data.Migrations
 
                     b.HasKey("MaterialSupplierId");
 
-                    b.ToTable("MaterialSuppliers");
+                    b.ToTable("MaterialSupplier");
                 });
 
             modelBuilder.Entity("Core.Entities.Offer", b =>
@@ -264,7 +301,7 @@ namespace Infrastracture.Data.Migrations
 
                     b.HasIndex("MId");
 
-                    b.ToTable("ProjectMaterials");
+                    b.ToTable("ProjectMaterial");
                 });
 
             modelBuilder.Entity("Core.Entities.ProjectWeekReport", b =>
@@ -391,31 +428,26 @@ namespace Infrastracture.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.MaterialSupplier", "MaterialSupplier")
-                        .WithMany()
-                        .HasForeignKey("MaterialSupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Subcontractor", "Subcontractor")
+                    b.Navigation("Customer");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Core.Entities.InvoiceDetail", b =>
+                {
+                    b.HasOne("Core.Entities.Invoice", "Invoice")
                         .WithMany()
-                        .HasForeignKey("SubcontractorId")
+                        .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
-
-                    b.Navigation("MaterialSupplier");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Subcontractor");
+                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("Core.Entities.Offer", b =>

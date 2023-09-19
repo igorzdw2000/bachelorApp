@@ -16,6 +16,7 @@ namespace Core.Interfaces
         Task UpdateCustomer(int id, Customer customer);
         Task DeleteCustomer(int id);
         Task<IEnumerable<Project>> GetProjectsForCustomer(int customerId);
+        Task<IEnumerable<Invoice>> GetInvoiceForCustomer(int customerId);
         Task AssignProjectToCustomer(int customerId, int projectId);
         Task UnassignProjectToCustomer(int customerId, int projectId);
     }
