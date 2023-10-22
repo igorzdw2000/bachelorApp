@@ -15,6 +15,7 @@ namespace API.Helpers
                 .ForMember(c => c.Customer, o => o.MapFrom(s => s.Customer.Name+" "+s.Customer.Surname))
                 .ForMember(p => p.Project, o => o.MapFrom(s => s.Project.Name));
             CreateMap<Address, AddressDto>().ReverseMap();
+            //CreateMap<Offer, OfferDto>();
         }
     }
 }

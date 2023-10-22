@@ -90,22 +90,23 @@ namespace Infrastracture.Repositories
         public bool isEditable(int id)
         {
             var invoice = _context.Invoices
-                    .Where(x=>x.CreationDate == null)
+                    .Where(x=>x.Published == true)
                     .FirstOrDefault(x=>x.InvoiceId == id);
             if(invoice != null)
                 return false;
             return true;
         }
 
+
         public async Task UpdateInvoice(Invoice invoice)
         {
             if(invoice == null) throw new ArgumentNullException(nameof(invoice));
             if(isEditable(invoice.InvoiceId))
             {
+            invoice.Published = true;
                 _context.Invoices.Update(invoice);
                 _context.SaveChanges();
             }
-            
             
         }
     }

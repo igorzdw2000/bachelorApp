@@ -28,6 +28,7 @@ builder.Services.AddScoped<ITaskRepository,TaskRepository>();
 builder.Services.AddScoped<ISubcontractorRepository, SubcontractorRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddScoped<IOfferRepository,OfferRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<AppDbContext>(options =>

@@ -27,6 +27,13 @@ namespace Infrastracture.Repositories
              _context.SaveChanges();
         }
 
+        public async Task AddOfferDetails(OfferDetail offerDetail)
+        {
+            if(offerDetail == null) throw new ArgumentNullException(nameof(offerDetail));
+            _context.OfferDetails.Add(offerDetail);
+            _context.SaveChanges();
+        }
+
         public async Task DeleteOffer(int id)
         {
             var offerToDelte = await _context.Offers.FindAsync(id);
@@ -48,8 +55,8 @@ namespace Infrastracture.Repositories
         public async Task<OfferDetail> GetOfferDetailById(int offerId)
         {
             var offerDetails = await _context.OfferDetails
-                .Include(s=>s.Service)
-                .FirstOrDefaultAsync(o=>o.OfferId==offerId);
+                .Include(s => s.Service)
+                .FirstOrDefaultAsync(o => o.OfferId == offerId);
             return offerDetails;
         }
 

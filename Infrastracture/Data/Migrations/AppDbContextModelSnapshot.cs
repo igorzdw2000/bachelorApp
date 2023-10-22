@@ -70,6 +70,9 @@ namespace Infrastracture.Data.Migrations
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Currency")
+                        .HasColumnType("int");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
@@ -83,6 +86,9 @@ namespace Infrastracture.Data.Migrations
                     b.Property<int>("InvoiceType")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Payed")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
@@ -91,6 +97,9 @@ namespace Infrastracture.Data.Migrations
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Published")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("SaleDate")
                         .HasColumnType("datetime2");
@@ -216,7 +225,10 @@ namespace Infrastracture.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("OfferDetailId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OfferDetailId"));
 
                     b.Property<double>("EstimatedLaborCost")
                         .HasColumnType("float");

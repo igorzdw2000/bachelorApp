@@ -13,8 +13,10 @@ namespace Core.Interfaces
         Task<IEnumerable<Offer>> GetOffers();
         Task<Offer> GetOfferById(int id);
         Task AddOffer(Offer offer);
+        Task AddOfferDetails(OfferDetail offerDetail);
         Task DeleteOffer(int id);
         Task UpdateOffer(Offer offer);
         Task<OfferDetail> GetOfferDetailById(int offerId);
+
     }
 }

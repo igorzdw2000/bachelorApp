@@ -73,12 +73,12 @@ namespace API.Controllers
         //    }
         //}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProjectValue(int id,[FromBody]double projectValue)
+        public async Task<IActionResult> UpdateProject(int id,[FromBody]Project project)
         {
             var existingProject = await _projectRepository.GetProjectByIdAsync(id);
             if (existingProject != null)
             {
-                await _projectRepository.UpdateProjectValue(id, projectValue);
+                //await _projectRepository.UpdateProjectValue(id, projectValue);
                 return Ok("Project value was successfuly updated");
             }
             else

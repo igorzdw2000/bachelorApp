@@ -18,7 +18,6 @@ namespace Core.Interfaces
         Task AddInvoice(Invoice invoice);
         Task UpdateInvoice(Invoice invoice);
         
-        
         Task<IEnumerable<Invoice>> GetInvoicesForProject(int projectId);
         Task<IEnumerable<Invoice>> GetInvoicesForMaterialsForProject(int projectId);
         bool isEditable(int id);

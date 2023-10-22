@@ -121,15 +121,9 @@ namespace Infrastracture.Repositories
             _context.SaveChanges();
         }
 
-
-        public async Task UpdateProjectValue(int id, double value)
+        public Task UpdateProjectValue(int id, Project project)
         {
-            var projectForUpdate = _context.Projects.FirstOrDefaultAsync(p=>p.ProjectId==id);
-            if (projectForUpdate.Result != null)
-            {
-                projectForUpdate.Result.ProjectValue = value;
-            }
-            _context.SaveChanges();
+            throw new NotImplementedException();
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Core.Entities
         public DateTime DateOfPayment { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+        public Currency Currency { get; set; }
         public double TotalToBePaid { get; set; }
         public string Comments { get; set; }
         public int CustomerId { get; set; }
@@ -29,6 +30,8 @@ namespace Core.Entities
         public int ProjectId { get; set; }
         public Project Project { get; set; }
         public InvoiceType InvoiceType { get; set; }
+        public bool Published { get; set; } = false;
+        public bool Payed { get; set; } = false;
     }
     [JsonConverter(typeof(EnumStringConverters<PaymentStatus>))]
     public enum PaymentStatus
@@ -42,5 +45,12 @@ namespace Core.Entities
     {
         Transfer,
         Cash
+    }
+    public enum Currency
+    {
+        USD,
+        EUR,
+        PLN,
+        CHF
     }
 }

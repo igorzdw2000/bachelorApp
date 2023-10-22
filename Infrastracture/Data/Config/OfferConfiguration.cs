@@ -28,14 +28,15 @@ namespace Infrastracture.Data.Config
     {
         public void Configure(EntityTypeBuilder<OfferDetail> builder)
         {
-            builder.HasKey(k => new { k.OfferId, k.OfferDetailId});
+            builder.HasKey(k => new { k.OfferId, k.OfferDetailId });
 
-            builder.Property(p=>p.EstimatedMaterialCost).IsRequired();
-            builder.Property(p=>p.EstimatedLaborCost).IsRequired();
+            builder.Property(p => p.EstimatedMaterialCost).IsRequired();
+            builder.Property(p => p.EstimatedLaborCost).IsRequired();
 
             builder.HasOne(p => p.Service)
                 .WithMany()
                 .HasForeignKey(p => p.ServiceId);
+            builder.Property(p => p.OfferDetailId).UseIdentityColumn();
         }
     }
 }

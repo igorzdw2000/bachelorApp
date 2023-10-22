@@ -15,7 +15,7 @@ namespace Core.Interfaces
         Task<IEnumerable<Project>> GetProjectsByCustomerName(string name);
         Task AddProject(Project project);
         Task RemoveProject(int id);
-        Task UpdateProjectValue(int id,double value);
+        Task UpdateProjectValue(int id,Project project);
         Task UpdateProjectEndDate(int id, DateTime newEndDate);
         Task AssignCustomerToProject(int projectId, int customerId);
         bool CheckIfProjectExists(int id);

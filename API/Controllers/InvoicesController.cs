@@ -4,6 +4,7 @@ using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Runtime.CompilerServices;
 
 namespace API.Controllers
 {
@@ -33,7 +34,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Wystąpił błąd podczas pobierania listy faktur: {ex.Message}");
+                return StatusCode(500, $"Error occured during retrieving invoices: {ex.Message}");
             }
         }
         [HttpGet("{id}")]
@@ -46,7 +47,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Wystąpił błąd podczas pobierania faktury: {ex.Message}");
+                return StatusCode(500, $"Error occured during retrieving invoice: {ex.Message}");
             }
         }
         [HttpGet("{invoiceId}/details")]
@@ -60,11 +61,11 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Wystąpił błąd podczas pobierania szczegółów faktury: {ex.Message}");
+                return StatusCode(500, $"Error occured during retrieving invoice details: {ex.Message}");
             }
         }
         [HttpPost]
-        public async Task<IActionResult> AddInvoice([FromBody] InvoiceAddDto invoiceDto)
+        public async Task<IActionResult> CreateInvoice([FromBody] InvoiceAddDto invoiceDto)
         {
             try
             {
@@ -93,7 +94,26 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Wystąpił błąd podczas dodawania faktury: {ex.Message}");
+                return StatusCode(500, $"Error occuered during creating invoice: {ex.Message}");
+            }
+        }
+        [HttpPut("{id}/publish")]
+        public async Task<IActionResult> PublishInvoice(int id)
+        {
+            try
+            {
+                var invoice = await _invoiceRepository.GetInvoiceById(id);
+                if (invoice != null)
+                {
+                    invoice.Published = true;
+                    await _invoiceRepository.UpdateInvoice(invoice);
+                }
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error occured during publishing invoice: {ex.Message}");
+                throw;
             }
         }
        
